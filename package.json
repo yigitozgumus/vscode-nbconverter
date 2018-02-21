@@ -1,7 +1,7 @@
 {
     "name": "NbConverter",
     "displayName": "Jupyter Notebook Converter",
-    "description": "Converts sectioned python files to Jupyter Notebooks",
+    "description": "Converts sectioned python files from Spyder to Jupyter Notebooks",
     "version": "0.0.1",
     "publisher": "yigitozgumus",
     "engines": {
