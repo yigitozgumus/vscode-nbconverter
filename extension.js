@@ -1,7 +1,7 @@
 
 const vscode = require('vscode');
 var PythonShell = require('python-shell');
-
+var configuration = vscode.workspace.getConfiguration("nbConverter")
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -19,12 +19,13 @@ function activate(context) {
         let editor = vscode.window.activeTextEditor;
         let pathName = editor.document.fileName;
         let index = pathName.lastIndexOf('/');
-        let directory = pathName.substring(0, index + 1)
-        let filename = pathName.substring(index + 1);
+        
+        let seperator = configuration.seperator.default;
+        console.log(configuration.seperator.default);
         var options = {
             mode: 'text',
             scriptPath: __dirname,
-            args: ['-i', pathName, '-c', '#%%']
+            args: ['-i', pathName, '-c', seperator]
         };
         PythonShell.run('pytonb.py', options, function (err, results) {
             if (err) throw err;
