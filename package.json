@@ -56,6 +56,6 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/yigitozgumus/nbConverter.git"
+        "url": "https://github.com/yigitozgumus/vscode-nbconverter.git"
     }
 }
