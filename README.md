@@ -37,4 +37,4 @@ print (a + b)
 
 ```
 
-![](/content/example.jpg)
+![](https://i.imgur.com/cYOjNEm.jpg)
