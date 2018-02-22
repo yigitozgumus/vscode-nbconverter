@@ -27,12 +27,13 @@ function activate(context) {
             scriptPath: __dirname,
             args: ['-i', pathName, '-c', seperator]
         };
-        PythonShell.run('pytonb.py', options, function (err, results) {
+        processFile(pathName);
+        PythonShell.run('./../pytonb.py', options, function (err, results) {
             if (err) throw err;
             // results is an array consisting of messages collected during execution
             console.log('results: %j', results);
         });     
-        console.log(directory)
+        
         // Display a message box to the user
         vscode.window.showInformationMessage('File converted to Jupyter Notebook');
     });
@@ -40,6 +41,24 @@ function activate(context) {
     context.subscriptions.push(disposable);
 }
 exports.activate = activate;
+
+function processFile(inputFile) {
+    var fs = require('fs'),
+        readline = require('readline'),
+        instream = fs.createReadStream(inputFile),
+        outstream = new (require('stream'))(),
+        rl = readline.createInterface(instream, outstream);
+
+    rl.on('line', function (line) {
+        console.log(line);
+    });
+
+    rl.on('close', function (line) {
+        console.log(line);
+        console.log('done reading file.');
+    });
+}
+exports.processFile = processFile;
 
 // this method is called when your extension is deactivated
 function deactivate() {
