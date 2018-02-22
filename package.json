@@ -2,7 +2,7 @@
     "name": "NbConverter",
     "displayName": "Jupyter Notebook Converter",
     "description": "Converts sectioned python files from Spyder to Jupyter Notebooks",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "publisher": "yigitozgumus",
     "engines": {
         "vscode": "^1.20.0"
@@ -21,20 +21,20 @@
                 "title": "Convert file to Jupyter Notebook"
             }
         ],
-        "configuration":[
+        "configuration": [
             {
                 "type": "object",
                 "title": "nbConverter seperator Configuration",
                 "properties": {
-                    "nbConverter.seperator.default" : {
+                    "nbConverter.seperator.default": {
                         "type": "string",
                         "default": "#%%",
                         "description": " Default seperator for the cells"
                     },
-                    "nbConverter.seperator.additional" :{
+                    "nbConverter.seperator.additional": {
                         "type": "object",
                         "default": "",
-                        "description" : "Additional seperator for cell seperation"
+                        "description": "Additional seperator for cell seperation"
                     }
                 }
             }
