@@ -3,6 +3,23 @@ const nbFormat = require("./nbformat.js");
 
 const fs = require('fs');
 var methods = {};
+//Tokens
+
+
+methods.tokenize = function tokenize(Data){
+
+};
+
+methods.parseCodeCell = function parseCodeCell(){
+
+};
+methods.parseMarkdownCell = function parseMarkdownCell(){
+
+};
+
+methods.translate = function convert_mark2(){
+
+};
 
 methods.convert = function convert_mark1(file, sep) {
     const global_data = fs.readFileSync(file).toString();
@@ -10,7 +27,7 @@ methods.convert = function convert_mark1(file, sep) {
     var notebook = nbFormat.new_notebook();
     const seperator = sep;
     let comment = false;
-
+    methods.test();
     for (var i = 0; i < fileData.length; i++) {
         var line = fileData[i];
         if (line.startsWith("\"\"\"")) {
@@ -18,24 +35,24 @@ methods.convert = function convert_mark1(file, sep) {
                 nbFormat.new_markdown_cell(notebook);
             } else {
                 nbFormat.new_code_cell(notebook);
-                notebook.cells[notebook.cells.length -1].source += (line.substring(3) + '\n');
+                nbFormat.addToCell(notebook, (line.substring(3) + '\n'));
                 comment = true;
             }
         }else if (line.startsWith(seperator)){
             nbFormat.new_markdown_cell(notebook);
-            notebook.cells[notebook.cells.length - 1].source += ('#' + line.substring(3) + '\n');
+            nbFormat.addToCell(notebook, ('#' + line.substring(3) + '\n'));
         }else if(line.endsWith("\"\"\"")){
             if(notebook.cells[notebook.cells.length - 1].cell_type === "code"){
-                notebook.cells[notebook.cells.length - 1].source += (line + '\n');
+                nbFormat.addToCell(notebook, (line + '\n'));
             }else{
-                notebook.cells[notebook.cells.length - 1].source += (line.substring(0,line.length-3) + '\n');
+                nbFormat.addToCell(notebook, (line.substring(0, line.length - 3) + '\n'))
                 comment = false;
             }
         }else{
             if (comment === false && notebook.cells[notebook.cells.length - 1].cell_type !== "code" && !(line.startsWith(seperator) ||line.startsWith("\"\"\""))){
                 nbFormat.new_code_cell(notebook);
             }
-            notebook.cells[notebook.cells.length - 1].source += (line + '\n');
+            nbFormat.addToCell(notebook, (line + '\n'));
         }
     }
     console.log(notebook);
