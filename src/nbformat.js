@@ -35,5 +35,9 @@ methods.new_markdown_cell = function markdownCell(notebook){
     cell.source = "";
     notebook.cells.push(cell);
 };
+
+methods.addToCell =function addToCell(notebook,content){
+    notebook.cells[notebook.cells.length-1].source += content ;
+}
 module.exports = methods;
 
