@@ -38,3 +38,9 @@ print (a + b)
 ```
 
 ![](https://i.imgur.com/cYOjNEm.jpg)
+
+## Next Tasks
+
+* Making the converter robust
+* Being able to convert py files that is converted from ipynb notebooks
+* More comprehensive conversion logic

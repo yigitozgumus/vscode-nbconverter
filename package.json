@@ -44,6 +44,7 @@
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "node ./node_modules/vscode/bin/test"
     },
+    "license": "SEE LICENCE IN LICENSE.txt",
     "devDependencies": {
         "typescript": "^2.6.1",
         "vscode": "^1.1.6",
@@ -52,6 +53,8 @@
         "@types/mocha": "^2.2.42"
     },
     "dependencies": {
+        "File": "^0.10.2",
+        "FileReader": "^0.10.2",
         "python-shell": "^0.5.0"
     },
     "repository": {
