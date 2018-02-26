@@ -13,3 +13,8 @@ Version 0.5.0
 Version 0.6.0
 
 * Conversion is moved to Javascript from Original Python script
+
+Version 1.0.0
+
+* Conversion is more robust
+* Seperator logic is changed
