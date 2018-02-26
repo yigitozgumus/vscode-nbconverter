@@ -17,7 +17,8 @@ function activate(context) {
         let pathName = editor.document.fileName;
         let index = pathName.lastIndexOf('/');
         let seperator = configuration.seperator.default;
-        var notebook = converter.convert(pathName,seperator);
+       // var notebook = converter.convert(pathName,seperator);
+        var notebook = converter.translate(pathName, seperator);
         converter.writeToFile(pathName,notebook);
           
         

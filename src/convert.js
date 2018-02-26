@@ -4,13 +4,13 @@ const nbFormat = require("./nbformat.js");
 const fs = require('fs');
 var methods = {};
 //Tokens
-var CODE1 = 'CODE1'; // code line
-var MARK1 = 'MARK1'; // markdown line 
-var MARK2 = 'MARK2'; // markdown block
-var COMM1 = 'COMM1'; // comment line around code
-var COMM2 = 'COMM2'; // multiline comment
-var SEP1 = 'SEP1'; // Empty seperator
-var SEP2 = 'SEP2'; // Filled Seperator
+const CODE1 = 'CODE1'; // code line
+const MARK1 = 'MARK1'; // markdown line 
+const MARK2 = 'MARK2'; // markdown block
+const COMM1 = 'COMM1'; // comment line around code
+const COMM2 = 'COMM2'; // multiline comment
+const SEP1 = 'SEP1'; // Empty seperator
+const SEP2 = 'SEP2'; // Filled Seperator
 
 
 //Methods
@@ -22,39 +22,46 @@ methods.preprocess = function preprocess(inputFile){
 
 methods.tokenize = function tokenize(Data,seperator){
     var tokenizedLines = [];
-    let addFlag = true;
-    let commentMarkCheck = false;
-    let markdownCell = false;
+   
+    var commentMarkCheck = false;
+    var markdownCell = false;
     for(var index = 0;index < Data.length;index++){
-        let line = Data[index];
+        var line = Data[index];
+        var addFlag = true;
+        
         let elem = {"token": "", "data": ""};
         if(line.startsWith(seperator)){
             if(line.length === seperator.length){
-                elem.token = SEP1;
+                elem.token = SEP1; // create a new code cell
             }else{
-                elem.token = SEP2;
+                elem.token = SEP2; // create a oneliner markdown cell for seperation and create a code cell
             }
             elem.data = (line + '\n');
             if (commentMarkCheck) {
                 commentMarkCheck = false;
             }
         }
-        else if(line.startsWith("#")){
-            elem.token = COMM1;
+        else if(line.startsWith("#") && !commentMarkCheck){ // could be comment or markdown line
+            elem.token = COMM1; // mark it as comment, we will check it
             elem.data = (line + '\n');
-        }else if(line.length === 0){
-            addFlag = false;
-        }else if(line.startsWith("\"\"\"")){
-            elem.token = COMM2;
+        }else if(line.length === 0){ // if it is an empty line dismiss it
+           // addFlag = false;
+        }else if(line.startsWith("\"\"\"")){ // either multiline comment or markdown structure beginning
+            if(markdownCell){
+                elem.token = MARK2;
+            }else{
+            elem.token = COMM2; // mark it as multiline comment start
+            }
             elem.data = (line + '\n');
-            if(commentMarkCheck){
+            if(commentMarkCheck){ // if it was checked make it false
                 commentMarkCheck = false;
             }else{
             commentMarkCheck = true;
             }
-        }else if(commentMarkCheck){
+        }else if(commentMarkCheck){ // previous case check
             if (line.startsWith("#")){
                 tokenizedLines[tokenizedLines.length - 1].token = MARK2;
+                //tokenizedLines[tokenizedLines.length - 1].data += '\n';
                 elem.token = MARK2;
                 commentMarkCheck = false;
                 markdownCell = true;
@@ -64,8 +71,13 @@ methods.tokenize = function tokenize(Data,seperator){
             elem.data = (line + '\n');   
         }else if(markdownCell){
             elem.token = MARK2;
-            elem.data = (line + '\n');
+            if(line.startsWith("|") && line.endsWith("|")){
+                elem.data = (line + '\n');
+            }else{
+            elem.data = (line + '\n\n');
+            }
         }else{
+            markdownCell = false;
             elem.token = CODE1;
             elem.data = (line + '\n');
         }
@@ -77,15 +89,71 @@ methods.tokenize = function tokenize(Data,seperator){
     return tokenizedLines ;
 };
 
-methods.parseCodeCell = function parseCodeCell(){
-
+methods.parseCodeCell = function parseCodeCell(notebook,token){
+    var cell_type = nbFormat.getCellType(notebook) ;
+    if(cell_type === 'code'){
+        nbFormat.addToCell(notebook,token.data);
+    }else{
+        nbFormat.new_code_cell(notebook);
+        nbFormat.addToCell(notebook,token.data);
+    }
 };
-methods.parseMarkdownCell = function parseMarkdownCell(){
-
+methods.parseMarkdownCell = function parseMarkdownCell(notebook,token){
+    var cell_type = nbFormat.getCellType(notebook);
+    if(token.data !== "\"\"\"\n"){
+        if (cell_type === 'markdown') {
+            nbFormat.addToCell(notebook, token.data);
+        } else {
+            nbFormat.new_markdown_cell(notebook);
+            nbFormat.addToCell(notebook, token.data);
+        }
+    }
+   
+};
+methods.parseCommentCell = function parseCommentCell(notebook,token){
+    var cell_type = nbFormat.getCellType(notebook);
+    if(cell_type === 'code'){
+        nbFormat.addToCell(notebook,token.data);
+    }else{
+        nbFormat.new_code_cell(notebook);
+        nbFormat.addToCell(notebook,token.data);
+    }
+};
+methods.parseSeperator = function parseSeperator(notebook,token){
+    var cell_type = nbFormat.getCellType(notebook);
+    if(cell_type === 'code' && token.token === 'SEP2'){
+        nbFormat.new_markdown_cell(notebook);
+        nbFormat.addToCell(notebook,'#' + token.data.substring(3));
+        nbFormat.new_code_cell(notebook);
+    }else if(token.token === 'SEP1'){
+        nbFormat.new_code_cell(notebook);
+    } else {
+        nbFormat.addToCell(notebook, '#' + token.data.substring(3));
+        nbFormat.new_code_cell(notebook);
+    }
 };
 
-methods.translate = function convert_mark2(){
-
+methods.translate = function convert_mark2(file,seperator){
+    var fileData = methods.preprocess(file);
+    var tokens = methods.tokenize(fileData,seperator); 
+    var noteb = nbFormat.new_notebook();  
+    nbFormat.new_markdown_cell(noteb);
+    console.log(noteb);
+    for (var index = 0;index < tokens.length ; index++){
+        if(tokens[index].token.startsWith("CODE")){
+            methods.parseCodeCell(noteb,tokens[index]);
+        } else if (tokens[index].token.startsWith("COMM")) {
+            methods.parseCommentCell(noteb, tokens[index]);
+        } else if (tokens[index].token.startsWith("MARK")) {
+            methods.parseMarkdownCell(noteb, tokens[index]);
+        }else if(tokens[index].token.startsWith("SEP")){
+            console.log("hehe");
+            methods.parseSeperator(noteb,tokens[index]);
+        }
+    }
+    console.log(noteb);
+    console.log("test");
+    return JSON.stringify(noteb);
 };
 
 methods.convert = function convert_mark1(file, sep) {

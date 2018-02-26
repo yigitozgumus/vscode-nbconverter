@@ -2,7 +2,7 @@
     "name": "NbConverter",
     "displayName": "Jupyter Notebook Converter",
     "description": "Converts sectioned python files from Spyder to Jupyter Notebooks",
-    "version": "0.5.0",
+    "version": "0.6.0",
     "publisher": "yigitozgumus",
     "engines": {
         "vscode": "^1.20.0"
