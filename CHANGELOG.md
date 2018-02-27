@@ -1,6 +1,5 @@
 # Change Log
 
-## 
 
 Version 0.4.0
 
@@ -18,3 +17,7 @@ Version 1.0.0
 
 * Conversion is more robust
 * Seperator logic is changed
+
+Version 1.0.1
+
+* Minor bug fixes
