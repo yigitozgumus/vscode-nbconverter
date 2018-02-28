@@ -85,7 +85,7 @@ methods.tokenize = function tokenize(Data,seperator){
         tokenizedLines.push(elem);
         }
     }
-    console.log(tokenizedLines);
+   // console.log(tokenizedLines);
     return tokenizedLines ;
 };
 
@@ -138,7 +138,7 @@ methods.translate = function convert_mark2(file,seperator){
     var tokens = methods.tokenize(fileData,seperator); 
     var noteb = nbFormat.new_notebook();  
     nbFormat.new_markdown_cell(noteb);
-    console.log(noteb);
+    //console.log(noteb);
     for (var index = 0;index < tokens.length ; index++){
         if(tokens[index].token.startsWith("CODE")){
             methods.parseCodeCell(noteb,tokens[index]);
@@ -147,12 +147,12 @@ methods.translate = function convert_mark2(file,seperator){
         } else if (tokens[index].token.startsWith("MARK")) {
             methods.parseMarkdownCell(noteb, tokens[index]);
         }else if(tokens[index].token.startsWith("SEP")){
-            console.log("hehe");
+           // console.log("hehe");
             methods.parseSeperator(noteb,tokens[index]);
         }
     }
-    console.log(noteb);
-    console.log("test");
+    //console.log(noteb);
+   // console.log("test");
     return JSON.stringify(noteb);
 };
 
@@ -190,13 +190,12 @@ methods.convert = function convert_mark1(file, sep) {
             nbFormat.addToCell(notebook, (line + '\n'));
         }
     }
-    console.log(notebook);
+    //console.log(notebook);
     return JSON.stringify(notebook);
 };
 
 methods.writeToFile = function writeToFile(file,notebook){
-    var outputFileName = file.substring(0,file.length - 3) + ".ipynb";
-    var stream = fs.createWriteStream(outputFileName);
+    var stream = fs.createWriteStream(file);
     stream.once('open', function () {
         stream.write(notebook.toString());
         console.log(notebook.toString());

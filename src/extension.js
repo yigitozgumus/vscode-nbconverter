@@ -5,6 +5,20 @@ var configuration = vscode.workspace.getConfiguration("nbConverter")
 const converter = require('./convert.js');
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
+
+async function writeToFile(notebook,directory,pathName,selection){
+    if(selection === 'No'){
+        var alternative = await vscode.window.showInputBox(); 
+        if(alternative === ""){
+            vscode.window.showErrorMessage("File name must not be empty");
+        }else{
+        converter.writeToFile(directory + alternative + '.ipynb',notebook);
+        }
+    }else if(selection === 'Yes'){
+        converter.writeToFile(pathName.substring(0,pathName.length - 2) + 'ipynb', notebook);
+    }
+}
+exports.writeToFile = writeToFile;
 function activate(context) {
 
     
@@ -15,15 +29,22 @@ function activate(context) {
         // The code you place here will be executed every time your command is executed
         let editor = vscode.window.activeTextEditor;
         let pathName = editor.document.fileName;
-        let index = pathName.lastIndexOf('/');
-        let seperator = configuration.seperator.default;
-       // var notebook = converter.convert(pathName,seperator);
-        var notebook = converter.translate(pathName, seperator);
-        converter.writeToFile(pathName,notebook);
-          
-        
-        // Display a message box to the user
-        vscode.window.showInformationMessage('File converted to Jupyter Notebook');
+        let fileName = pathName.substring(pathName.lastIndexOf("/")+1);
+        console.log("filename:" + fileName);
+        let directory = pathName.substring(0, pathName.lastIndexOf("/")+1);
+        console.log("Directory:" + directory)
+        console.log(fileName.substring(fileName.length - 2) !== "py");
+        if(fileName.substring(fileName.length - 2) !== "py"){
+            vscode.window.showErrorMessage("File type is not Python.");
+        }else{
+            let seperator = configuration.seperator.default;
+            var notebook = converter.translate(pathName, seperator);
+            vscode.window.showInformationMessage("Do you want to save it with the default file name",...["Yes","No"]).then(selection =>{
+                writeToFile(notebook,directory,pathName,selection);
+            });
+           // vscode.window.showInformationMessage('File converted to Jupyter Notebook');  
+        }
+
     });
 
     context.subscriptions.push(disposable);

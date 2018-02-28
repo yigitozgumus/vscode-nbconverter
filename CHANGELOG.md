@@ -18,6 +18,11 @@ Version 1.0.0
 * Conversion is more robust
 * Seperator logic is changed
 
-Version 1.0.1
+Version 1.1.0
 
 * Minor bug fixes
+
+Version 1.2.0
+
+* File type check is Added
+* Output filename modification is added.
