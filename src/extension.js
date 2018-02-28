@@ -13,9 +13,11 @@ async function writeToFile(notebook,directory,pathName,selection){
             vscode.window.showErrorMessage("File name must not be empty");
         }else{
         converter.writeToFile(directory + alternative + '.ipynb',notebook);
+        vscode.window.showInformationMessage('File converted to Jupyter Notebook'); 
         }
     }else if(selection === 'Yes'){
         converter.writeToFile(pathName.substring(0,pathName.length - 2) + 'ipynb', notebook);
+        vscode.window.showInformationMessage('File converted to Jupyter Notebook'); 
     }
 }
 exports.writeToFile = writeToFile;
@@ -42,7 +44,7 @@ function activate(context) {
             vscode.window.showInformationMessage("Do you want to save it with the default file name",...["Yes","No"]).then(selection =>{
                 writeToFile(notebook,directory,pathName,selection);
             });
-           // vscode.window.showInformationMessage('File converted to Jupyter Notebook');  
+            
         }
 
     });
