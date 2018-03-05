@@ -26,3 +26,11 @@ Version 1.2.0
 
 * File type check is Added
 * Output filename modification is added.
+
+Version 1.2.1
+
+* Icon is added
+
+Version 1.3.1 
+
+* Optional file save dialog is added.
