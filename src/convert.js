@@ -7,7 +7,7 @@ var methods = {};
 const CODE1 = 'CODE1'; // code line
 const MARK1 = 'MARK1'; // markdown line 
 const MARK2 = 'MARK2'; // markdown block
-const COMM1 = 'COMM1'; // comment line around code
+const COMM1 = 'COMM1'; // comment line around code`
 const COMM2 = 'COMM2'; // multiline comment
 const SEP1 = 'SEP1'; // Empty seperator
 const SEP2 = 'SEP2'; // Filled Seperator
@@ -195,12 +195,18 @@ methods.convert = function convert_mark1(file, sep) {
 };
 
 methods.writeToFile = function writeToFile(file,notebook){
-    var stream = fs.createWriteStream(file);
-    stream.once('open', function () {
-        stream.write(notebook.toString());
-        console.log(notebook.toString());
-        stream.end();
-    });
+    // var stream = fs.createWriteStream(file);
+    // stream.once('open', function () {
+    //     stream.write(notebook.toString());
+    //     console.log(notebook.toString());
+    //     stream.end();
+    // });
+    fs.writeFile(file, notebook.toString(), function (err) {
+        if (err) {
+            return console.log('there is an error');
+        }});
+        console.log("new method works.");
+
 };
 
 module.exports = methods;

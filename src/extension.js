@@ -1,7 +1,8 @@
 
 const vscode = require('vscode');
 //var PythonShell = require('python-shell');
-var configuration = vscode.workspace.getConfiguration("nbConverter")
+var configuration = vscode.workspace.getConfiguration("nbConverter");
+
 const converter = require('./convert.js');
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -11,6 +12,7 @@ async function writeToFile(notebook,directory,pathName,selection){
         var alternative = await vscode.window.showInputBox(); 
         if(alternative === ""){
             vscode.window.showErrorMessage("File name must not be empty");
+            
         }else{
         converter.writeToFile(directory + alternative + '.ipynb',notebook);
         vscode.window.showInformationMessage('File converted to Jupyter Notebook'); 
@@ -37,26 +39,22 @@ function activate(context) {
         //console.log("Directory:" + directory)
         //console.log(fileName.substring(fileName.length - 2) !== "py");
         if(fileName.substring(fileName.length - 2) !== "py"){
-            console.log("mo");
             vscode.window.showErrorMessage("File type is not Python.");
         }else{
-            console.log("mo1");
             let seperator = configuration.seperator.default;
             let fileSaveDialog = configuration.openFileSaveDialog;
-            console.log(fileSaveDialog);
             var notebook = converter.translate(pathName, seperator);
-            console.log("mo2");
-            if(!fileSaveDialog){
-                console.log("mo3");
+            //TODO
+           // if(!fileSaveDialog){
                  vscode.window.showInformationMessage("Do you want to save it with the default file name", ...["Yes", "No"]).then(selection => {
                     writeToFile(notebook, directory, pathName, selection);
                 });
-            }else{
-                console.log("mo4");
-               vscode.window.showSaveDialog({
-                    defaultUri: vscode.Uri.file(pathName.substring(0, pathName.length - 2) + 'ipynb')
-                });
-            }
+           // }
+            // else{
+            //    vscode.window.showSaveDialog({
+            //         defaultUri: vscode.Uri.file(pathName.substring(0, pathName.length - 2) + 'ipynb')
+            //     });
+            // }
             
             
         }
