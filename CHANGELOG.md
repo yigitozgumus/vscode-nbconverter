@@ -38,3 +38,7 @@ Version 1.3.1
 Version 1.4.0 
 
 * File save option Bug fix for different OS
+
+Version 1.5.0
+
+* Dependency updates

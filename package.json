@@ -3,7 +3,7 @@
     "displayName": "Jupyter Notebook Converter",
     "icon": "assests/logo.png",
     "description": "Converts sectioned python files from Spyder to Jupyter Notebooks",
-    "version": "1.2.2",
+    "version": "1.5.0",
     "publisher": "yigitozgumus",
     "engines": {
         "vscode": "^1.20.0"
@@ -39,9 +39,9 @@
                         "description": "Additional seperator for cell seperation"
                     },
                     "nbConverter.openFileSaveDialog": {
-                        "type":"boolean",
+                        "type": "boolean",
                         "default": "false",
-                        "description" : "Optional file save Dialog window"
+                        "description": "Optional file save Dialog window"
                     }
                 }
             }
@@ -53,11 +53,11 @@
     },
     "license": "SEE LICENCE IN LICENSE.txt",
     "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
-        "eslint": "^4.11.0",
-        "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+        "@types/mocha": "^2.2.42",
+        "@types/node": "^7.10.11",
+        "eslint": "^4.19.1",
+        "typescript": "^2.9.2",
+        "vscode": "^1.1.37"
     },
     "dependencies": {
         "File": "^0.10.2",
